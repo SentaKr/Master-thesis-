@@ -213,9 +213,9 @@ ggplot(total_sequences_alldata_long, aes(x=name, y=read_counts, fill=Sample)) +
   facet_grid(~Sample)+
   scale_fill_manual(values =getPalette(colourCount))+
   theme_bw() +
-  theme(axis.title = element_text(size=20),
-        axis.text = element_text(size=14),
-        strip.text = element_text(size = 16, face = "bold"),
+  theme(axis.title = element_text(size=24),
+        axis.text = element_text(size=24),
+        strip.text = element_text(size = 24, face = "bold"),
         legend.title = element_text(size=14),
         legend.text = element_text(size = 14),
         axis.text.x = element_text(angle = 45, vjust = 1, hjust = 1, face = "bold"),
@@ -392,29 +392,31 @@ log2_df <- log2_df %>% mutate(
                        str_detect(Sample_ID, "ALT") ~ "ALT"))
 
 condition_genotype_tolerance.pca <- PCA(log2_df[,c(-32920, -32919, -32918)], graph = FALSE)
-  fviz_pca_ind(condition_genotype_tolerance.pca, addEllipses = FALSE) +
+  fviz_pca_ind(condition_genotype_tolerance.pca, addEllipses = FALSE, label = FALSE) +
   geom_point(aes(shape=log2_df$Condition, color=log2_df$Genotype), size=6) +
-  scale_color_manual(values= c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")) +
   scale_shape_manual(values = c(19,17))+
+  scale_color_manual(values= c("#999999", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7")) +
   theme_minimal()+
   theme(axis.title = element_text(size=24),
-        axis.text = element_text(size=20),
-        strip.text = element_text(size = 20),
+        axis.text = element_text(size=24),
+        strip.text = element_text(size = 24),
         legend.title = element_text(size=24),
-        legend.text = element_text(size = 20))
+        legend.text = element_text(size = 24)) +
+    labs(col="Genotype",shape="Condition")
 
 # PCA tolerance ####
 
-fviz_pca_ind(condition_genotype_tolerance.pca, addEllipses = FALSE) +
+fviz_pca_ind(condition_genotype_tolerance.pca, addEllipses = FALSE, labelsize=6) +
   geom_point(aes(shape=log2_df$Tolerance, color=log2_df$Tolerance), size=6) +
   scale_color_manual(values= c("#D55E00", "#56B4E9")) +
   scale_shape_manual(values = c(19, 17))+
   theme_minimal() +
   theme(axis.title = element_text(size=24),
-        axis.text = element_text(size=20),
-        strip.text = element_text(size = 20),
+        axis.text = element_text(size=24),
+        strip.text = element_text(size = 24),
         legend.title = element_text(size=24),
-        legend.text = element_text(size = 20))
+        legend.text = element_text(size = 24))+
+    labs(col="Tolerance",shape="Tolerance")
 
 
 # DEGs in heat vs. control conditions all genotypes ####
@@ -530,14 +532,15 @@ ggplot(GO_downreg_upreg_top20, aes(x=GeneRatio, y=Description, fill =p.adjust)) 
   geom_bar(stat="identity")+
   facet_grid(~Expression)+
   scale_fill_gradient2(high= "#0072B2",low = "#D55E00", midpoint = 0.025, mid = '#F0E442') +
-  #scale_fill_brewer(palette = "Spectral")+
   theme_bw()+
   theme(axis.title = element_text(size=20),
-        axis.text = element_text(size=14, face = "bold"),
-        strip.text = element_text(size = 16, face = "bold"),
-        legend.title = element_text(size=14),
-        legend.text = element_text(size = 14))+
-  geom_text(aes(label=GeneCounts),hjust=-0.25)
+        axis.text.y = element_text(size=18, face = "bold"),
+        axis.text.x = element_text(size=18, face = "bold",vjust = 0.35, angle = 45),
+        strip.text = element_text(size = 20, face = "bold"),
+        legend.title = element_text(size=18),
+        legend.text = element_text(size = 18),
+        axis.title.x = element_text(vjust = -0.25)) + 
+  geom_text(aes(label=GeneCounts),hjust=2, size=6)
 
 
                     #########################################################################
@@ -1345,7 +1348,7 @@ phenotype_data <- starch_content_pca %>%
 ### 2. PCA phenotype data   
 phenotype.pca <- PCA(phenotype_data[,c(-4, -5, -6)], graph = FALSE)
 
-fviz_pca_biplot(phenotype.pca, addEllipses = FALSE, arrowsize=1) +
+fviz_pca_biplot(phenotype.pca, addEllipses = FALSE, arrowsize=1, labelsize=7, col.var = "#E69F00") +
   geom_point(aes(shape=phenotype_data$condition, color=phenotype_data$tolerance), size=6) +
   scale_color_manual(values= c("#D55E00", "#56B4E9")) +
   scale_shape_manual(values = c(19,17))+
@@ -1354,7 +1357,8 @@ fviz_pca_biplot(phenotype.pca, addEllipses = FALSE, arrowsize=1) +
         axis.text = element_text(size=20),
         strip.text = element_text(size = 20),
         legend.title = element_text(size=24),
-        legend.text = element_text(size = 20))
+        legend.text = element_text(size = 20))+
+  labs(col="Tolerance",shape="Condition")
 
 
 # filtering result tables per genotype after starchgenes ####
